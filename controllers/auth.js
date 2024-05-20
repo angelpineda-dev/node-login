@@ -53,10 +53,14 @@ const login = async (req, res) => {
             throw ("Email or Password incorrect");
         }
 
-        const token = jwt.sign({uid: user._id}, process.env.TOKEN_KEY);
+        const token = jwt.sign({uid: user._id}, process.env.TOKEN_KEY, {
+            expiresIn: 20,
+            algorithm: 'HS256'
+        });
         
         res.json({
             status: true,
+            user,
             token
         })
     } catch (error) {

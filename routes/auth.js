@@ -24,4 +24,6 @@ router.post('/register',[
     validateFields
 ], register);
 
+// TODO: logout
+
 module.exports = router;

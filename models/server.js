@@ -8,7 +8,8 @@ class Server{
         this.port = process.env.PORT;
 
         this.paths = {
-            auth: "/api/auth"
+            auth: "/api/auth",
+            todo: "/api/todo"
         }
 
         this.database();
@@ -30,6 +31,7 @@ class Server{
 
     routes(){
         this.app.use(this.paths.auth, require('../routes/auth'));
+        this.app.use(this.paths.auth, require('../routes/todo'));
     }
 
     listen(){

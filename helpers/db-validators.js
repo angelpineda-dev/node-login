@@ -1,6 +1,5 @@
 const User = require("../models/user")
 
-
 const validateEmail = async (email) => {
     const isEmail = await User.findOne({email});
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
