@@ -54,7 +54,7 @@ const login = async (req, res) => {
             throw ("Email or Password incorrect");
         }
 
-        const token = await generateJWT();
+        const token = await generateJWT(user.id);
         
         res.json({
             status: true,
