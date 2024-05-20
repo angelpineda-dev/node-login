@@ -4,7 +4,7 @@ const { check } = require('express-validator');
 /* controller */
 const { register, login } = require('../controllers/auth');
 /* helpers */
-const { validateFields } = require('../helpers/validateFields');
+const { validateFields } = require('../middlewares/validateFields');
 const { validateEmail, validatePassword } = require('../helpers/db-validators');
 
 /* variables */
