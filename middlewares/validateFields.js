@@ -7,9 +7,13 @@ const validateFields = (req, res, next) =>{
         console.log(validation)
         
         let errorMsg = validation.errors.map(err => {
-            return { field: err.path, msg: err.msg }
+            return `${err.msg} - ${err.path}`;
         })
-        return res.status(400).json(errorMsg);
+
+        return res.status(400).json({
+            status: false,
+            error: errorMsg
+        });
     }
 
     next();
