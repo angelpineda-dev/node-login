@@ -8,8 +8,8 @@ const generateJWT = (uid) => {
             reject("UID required");
         }
 
-        jwt.sign({ uid }, process.env.TOKEN_KEY, {
-            expiresIn: 20,
+        jwt.sign( { uid } , process.env.TOKEN_KEY, {
+            expiresIn: '8h',
             algorithm: 'HS256'
         }, (err, token) => {
             if (err) {

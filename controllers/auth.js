@@ -71,10 +71,39 @@ const login = async (req, res) => {
             error: errors
         })
     }
+}
 
+const me = async (req, res) => {
+    const authorization = req.header('authorization');
+
+    if (!authorization) {
+        res.status(400).json({
+            status: false,
+            error: 'Token authorization not found'
+        })
+    }
+    
+    try {
+        const  { uid }  = jwt.verify(authorization, process.env.TOKEN_KEY);
+
+        const user = await User.findById(uid);
+
+        res.json({
+            status: true,
+            user,
+        })
+
+    } catch (error) {
+        console.log(error)
+        res.status(400).json({
+            status: false,
+            error: error
+        })
+    }
 }
 
 module.exports = {
     register,
-    login
+    login,
+    me
 }

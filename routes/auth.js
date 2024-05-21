@@ -2,7 +2,7 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
 /* controller */
-const { register, login } = require('../controllers/auth');
+const { register, login, me } = require('../controllers/auth');
 /* helpers */
 const { validateFields } = require('../middlewares/validateFields');
 const { validateEmail, validatePassword } = require('../helpers/db-validators');
@@ -25,5 +25,7 @@ router.post('/register',[
 ], register);
 
 // TODO: logout
+
+router.get('/me', me)
 
 module.exports = router;
