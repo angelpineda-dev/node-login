@@ -24,7 +24,6 @@ router.post('/register',[
     validateFields
 ], register);
 
-// TODO: logout
 
 router.get('/me', me)
 
