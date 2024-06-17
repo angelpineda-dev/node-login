@@ -19,7 +19,7 @@ async function dbConnection(){
                 name: 'admin',
                 email: 'admin@test.com',
                 password,
-                rol: 'ADMIN'
+                rol: 'ADMIN_ROLE'
             })
 
             await newUser.save();

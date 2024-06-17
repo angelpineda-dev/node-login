@@ -9,7 +9,7 @@ class Server{
 
         this.paths = {
             auth: "/api/auth",
-            todo: "/api/todo"
+            todo: "/api/category"
         }
 
         this.database();
@@ -31,7 +31,7 @@ class Server{
 
     routes(){
         this.app.use(this.paths.auth, require('../routes/auth'));
-        //this.app.use(this.paths.todo, require('../routes/todo'));
+        this.app.use(this.paths.todo, require('../routes/categories'));
     }
 
     listen(){
