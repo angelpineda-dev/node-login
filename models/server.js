@@ -31,7 +31,7 @@ class Server{
 
     routes(){
         this.app.use(this.paths.auth, require('../routes/auth'));
-        this.app.use(this.paths.auth, require('../routes/todo'));
+        //this.app.use(this.paths.todo, require('../routes/todo'));
     }
 
     listen(){

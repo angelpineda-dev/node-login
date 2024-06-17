@@ -11,8 +11,16 @@ const UserSchema = Schema({
         unique: true
     },
     password: {
-        type:String,
+        type: String,
         required: [true, "Password is required."]
+    },
+    rol: {
+        type: String,
+        required: [true, "Rol is required."]
+    },
+    status: {
+        type: Boolean,
+        default: true,
     }
 },{
     timestamps: true,

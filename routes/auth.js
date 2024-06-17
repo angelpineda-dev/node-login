@@ -19,6 +19,7 @@ router.post('/login',[
 router.post('/register',[
     check("name").notEmpty(),
     check("password").notEmpty(),
+    check("rol").notEmpty(),
     check("email").custom(validateEmail),
     check("password").custom(validatePassword),
     validateFields
