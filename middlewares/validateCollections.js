@@ -1,20 +1,25 @@
-const category = require("../models/category");
+const { request, response } = require('express');
+const Category = require("../models/category");
 
-async function  isCategory(req, res, next){
-    const { id } = req.params;
-    const existsCategory = await Category.findById({id});
+async function  isValidCategory( id ){
+
+    const existsCategory = await Category.findById(id);
 
     if (!existsCategory) {
-        
-        res.status(400).json({
-            status: false,
-            message: 'Category already exists'
-        })
+        throw new Error('Not valid category - id.')
     }
+}
 
-    return true;
+async function duplicatedCategory(name){
+    
+    const existsCategory = await Category.findOne({name});
+
+    if (existsCategory) {
+        throw new Error('Category already exists');
+    }
 }
 
 module.exports = {
-    isCategory
+    isValidCategory,
+    duplicatedCategory
 }

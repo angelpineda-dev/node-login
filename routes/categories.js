@@ -5,7 +5,7 @@ const { validateFields,
     validateJWT, 
     hasRole 
 } = require('../middlewares');
-const { isCategory } = require('../middlewares/validateCollections');
+const { isValidCategory, duplicatedCategory } = require('../middlewares/validateCollections');
 
 const router = Router();
 
@@ -19,6 +19,7 @@ router.post("/", [
     validateJWT,
     hasRole(['ADMIN_ROLE']),
     check("name").notEmpty(),
+    check('name').custom(duplicatedCategory),
     validateFields
 ], create);
 
@@ -27,8 +28,9 @@ router.put("/:id", [
     validateJWT,
     hasRole(['ADMIN_ROLE']),
     check('id').isMongoId(),
-    check('id').custom(isCategory),
+    check('id').custom(isValidCategory),
     check('name').notEmpty(),
+    check('name').custom(duplicatedCategory),
     validateFields
 ], update);
 
@@ -36,7 +38,7 @@ router.delete('/:id', [
     validateJWT,
     hasRole(['ADMIN_ROLE']),
     check('id').isMongoId(),
-    check('id').custom(isCategory),
+    check('id').custom(isValidCategory),
     validateFields
 ], remove)
 

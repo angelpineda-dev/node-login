@@ -38,9 +38,7 @@ const show = async (req, res = response) => {
 
 const create = async (req, res) => {
     const { name } = req.body;
-
-    isDuplicatedCategory(res, name)
-
+    
     try {
 
         const newCategory = new Category({
@@ -63,8 +61,6 @@ const create = async (req, res) => {
 const update = async (req, res) => {
     const { id } = req.params;
     const { name } = req.body;
-
-    isDuplicatedCategory(res, name);
 
     try {
         const category = await Category.findById(id);
@@ -118,23 +114,6 @@ const remove = async (req, res) => {
     }
 }
 
-
-/* Inner validations */
-
-// could be a middleware
-const isDuplicatedCategory = async (res, word) => {
-    const name = word.toUpperCase()
-
-    const isCategory = await Category.findOne({ name });
-
-    if (isCategory) {
-
-        return res.json({
-            status: false,
-            message: 'Category already exists'
-        })
-    }
-}
 
 module.exports = {
     index,
