@@ -4,7 +4,7 @@ const { check } = require('express-validator');
 /* Controllers */
 const { index, create, update, remove } = require('../controllers/product');
 /* middlewares */
-const { validateFields, validateJWT, isValidCategory, isValidUser, isValidProduct } = require('../middlewares');
+const { validateFields, validateJWT, isValidCategory, isValidUser, isValidProduct, hasRole } = require('../middlewares');
 
 const router = Router();
 
@@ -12,6 +12,7 @@ router.get('/', index);
 
 router.post('/', [
     validateJWT,
+    hasRole(['ADMIN_ROLE']),
     check('user').isMongoId(),
     check('category').isMongoId(),
     check('name', 'Name is required').notEmpty(),
@@ -24,17 +25,19 @@ router.post('/', [
 ], create)
 
 router.put('/:id', [
-    validateJWT, 
+    validateJWT,
+    hasRole(['ADMIN_ROLE']), 
     check('id', "ID is not a mongo id.").isMongoId(), 
     check('id').custom(isValidProduct),
     validateFields], update);
 
 router.delete('/:id', [
-    validateJWT, 
+    validateJWT,
+    hasRole(['ADMIN_ROLE']),
     check('id', "ID is not a mongo id.").isMongoId(),
     check('id').custom(isValidProduct),
     validateFields
 ], remove);
 
 
-module.exports = router;
+module.exports = router;  
