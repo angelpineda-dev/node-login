@@ -1,9 +1,11 @@
 const express = require('express');
 const cors = require('cors');
-const {dbConnection} = require('../database/config');
+const fileUpload = require('express-fileupload');
 
-class Server{
-    constructor(){
+const { dbConnection } = require('../database/config');
+
+class Server {
+    constructor() {
         this.app = express();
         this.port = process.env.PORT;
 
@@ -11,6 +13,7 @@ class Server{
             auth: "/api/auth",
             category: "/api/category",
             products: "/api/product",
+            uploads: "/api/uploads",
         }
 
         this.database();
@@ -20,24 +23,31 @@ class Server{
         this.routes();
     }
 
-    async database(){
+    async database() {
         await dbConnection()
     }
 
-    middlewares(){
+    middlewares() {
         this.app.use(cors());
 
         this.app.use(express.json());
+
+        this.app.use(fileUpload({
+            useTempFiles: true,
+            tempFileDir: '/tmp/',
+            createParentPath: true
+        }));
     }
 
-    routes(){
+    routes() {
         this.app.use(this.paths.auth, require('../routes/auth'));
         this.app.use(this.paths.category, require('../routes/categories'));
         this.app.use(this.paths.products, require('../routes/products'));
+        this.app.use(this.paths.uploads, require('../routes/uploads'));
     }
 
-    listen(){
-        this.app.listen(this.port, () =>{
+    listen() {
+        this.app.listen(this.port, () => {
             console.log(`listening on port: ${this.port}`)
         })
     }

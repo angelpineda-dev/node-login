@@ -18,6 +18,9 @@ const UserSchema = Schema({
         type: String,
         required: [true, "Rol is required."]
     },
+    image: {
+        type: String,
+    },
     status: {
         type: Boolean,
         default: true,

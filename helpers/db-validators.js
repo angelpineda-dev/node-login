@@ -26,7 +26,17 @@ const validatePassword = async (password = '') => {
     }
 }
 
+const validCollections = (collection = '', collections = []) => {
+    
+    if (!collections.includes(collection)) {
+        throw new Error(`Collection ${collection} is not valid -  Use ${collections}.`)
+    }
+
+    return  true;
+}
+
 module.exports = {
     validateEmail,
-    validatePassword
+    validatePassword,
+    validCollections
 }
