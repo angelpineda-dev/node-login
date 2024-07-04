@@ -9,7 +9,7 @@ const CategorySchema = Schema({
     },
     user:{
         type: Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'user',
         required: [true, "User is required"]
     },
     status: {
@@ -27,7 +27,7 @@ CategorySchema.set('toObject', { getters: true });
 
 
 CategorySchema.methods.toJSON = function () {
-    const { _id, ...category } = this.toObject();
+    const { _id, user, ...category } = this.toObject();
 
     category.id = _id;
 
