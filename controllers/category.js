@@ -1,14 +1,37 @@
 const { request, response } = require('express');
 const Category = require('../models/category');
+const Product = require('../models/product');
 
 const index = async (req, res = response) => {
+    const { limit = 10, page = 1, search = '' } = req.query;
+
+    const query = search
+        ? { status: true, $text: { $search: `\"${search}\"` } }
+        : { status: true }
+
+    let skip = (page - 1) * limit;
 
     try {
-        const categories = await Category.find({ status: true });
+        const [total, categories] = await Promise.all([
+            Category.countDocuments(query),
+            Category.find( query )
+                .skip( Number( skip ))
+                .limit( Number( limit))
+        ]);
+
+        const totalPages = Math.ceil(total / limit);
 
         res.json({
             status: true,
-            categories
+            data: {
+                categories, 
+                pagination: {
+                    total,
+                    itemsPerPage: limit,
+                    page,
+                    totalPages
+                } 
+            }
         })
     } catch (error) {
         res.status(500).json({
@@ -26,7 +49,7 @@ const show = async (req, res = response) => {
 
         res.json({
             status: true,
-            category
+            data:  category
         })
     } catch (error) {
         res.status(500).json({
@@ -41,29 +64,33 @@ const create = async (req, res) => {
     
     try {
 
-        const newCategory = new Category({
+        const category = new Category({
             name,
             user: req.user._id
         });
 
-        await newCategory.save();
+        await category.save();
 
         res.status(201).json({
             status: true,
-            msg: "Created created"
+            data: category
         })
     } catch (error) {
-
-        res.status(500).json({ status: false, message: error.message });
+        res
+            .status(500)
+            .json({ status: false, message: error.message });
     }
 }
 
 const update = async (req, res) => {
     const { id } = req.params;
-    const { name } = req.body;
 
     try {
-        const category = await Category.findById(id);
+        const category = await Category.findByIdAndUpdate(
+            id, 
+            req.body, 
+            {new: true, runValidators: true}
+        );
 
         if (!category || !category.status) {
             return res.status(404).json({
@@ -72,16 +99,14 @@ const update = async (req, res) => {
             })
         }
 
-        category.name = name;
-
-        await category.save();
-
-        res.status(200).json({
+        res.status(201).json({
             status: true,
-            category
+            data: category
         })
     } catch (error) {
-        res.status(500).json({ status: false, message: error.message });
+        res
+            .status(500)
+            .json({ status: false, message: error.message });
     }
 }
 
@@ -104,12 +129,12 @@ const remove = async (req, res) => {
 
         res.json({
             status: true,
-            category
+            data: category
         })
     } catch (error) {
         res.status(500).json({
             status: false,
-            error
+            error: error.message
         })
     }
 }

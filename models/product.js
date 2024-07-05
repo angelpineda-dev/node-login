@@ -13,7 +13,7 @@ const ProductSchema = Schema({
     user: {
         type: Schema.Types.ObjectId,
         ref: 'user',
-        required: [true, "User es required for a product."]
+        required: [true, "User is required."]
     },
     price: {
         type: Number,
@@ -39,8 +39,10 @@ const ProductSchema = Schema({
     versionKey: false,
 });
 
+ProductSchema.index({ name: 'text', description: 'text'})
+
 ProductSchema.methods.toJSON = function(){
-    const { _id, user, ...product } = this.toObject();
+    const { _id, user, status, ...product } = this.toObject();
 
     product.id = _id;
 

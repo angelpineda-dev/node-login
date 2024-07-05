@@ -7,10 +7,13 @@ const CategorySchema = Schema({
         set: v => v.toUpperCase(),
         required: [true, "Name is required"],
     },
-    user:{
+    description: {
+        type: String
+    },
+    user: {
         type: Schema.Types.ObjectId,
         ref: 'user',
-        required: [true, "User is required"]
+        required: [true, "User is required."]
     },
     status: {
         type: Boolean,
@@ -21,18 +24,23 @@ const CategorySchema = Schema({
     versionKey: false,
 });
 
+
+
 // Ensure that getters are included in the output
 // CategorySchema.set('toJSON', { getters: true });
 CategorySchema.set('toObject', { getters: true });
 
+CategorySchema.index({name: 'text', description: 'text'})
+
 
 CategorySchema.methods.toJSON = function () {
-    const { _id, user, ...category } = this.toObject();
+    const { _id, ...category } = this.toObject();
 
     category.id = _id;
 
     return category;
 }
+
 
 function capitalize(word){
     const firstLetter = word.charAt(0);

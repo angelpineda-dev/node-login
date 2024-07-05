@@ -2,13 +2,17 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
 /* Controllers */
-const { index, create, update, remove } = require('../controllers/product');
+const { index, create, update, remove, show } = require('../controllers/product');
 /* middlewares */
 const { validateFields, validateJWT, isValidCategory, isValidUser, isValidProduct, hasRole } = require('../middlewares');
 
 const router = Router();
 
 router.get('/', index);
+
+router.get('/:id', [
+    check('id').isMongoId(),
+], show);
 
 router.post('/', [
     validateJWT,
